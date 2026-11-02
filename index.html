@@ -1,4 +1,4 @@
-<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Cybersecurity Roadmap</title>
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>cyberscraped - Cybersecurity, curated</title>
 <style>
 :root{--bg:#0b0b0b;--panel:#101010;--fg:#f2f2f2;--dim:#8a8a8a;--line:#2a2a2a;--red:#ff3b30}
 *{box-sizing:border-box}html,body{height:100%}body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.45 ui-monospace,"SF Mono",Menlo,Consolas,monospace}
@@ -35,7 +35,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-a
 #scrim{display:none}
 @media(max-width:820px){#side{position:fixed;left:0;top:0;z-index:30;transform:translateX(-100%);transition:transform .2s;width:min(320px,86vw)}body.nav #side{transform:none}body.nav #scrim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:25}#menu{display:block}#main{padding:0 14px 50px}#grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}}
 @media(max-width:480px){#grid{grid-template-columns:1fr}}
-</style></head><body><div id=app>
+.logo small{font-size:11px;font-weight:400;letter-spacing:.02em;opacity:.55;text-transform:none}</style></head><body><div id=app>
 <nav id=side aria-label="Roadmap navigation"></nav><div id=scrim></div>
 <main id=main></main></div>
 <div id=md role=dialog aria-modal=true aria-label="Video player"><div id=box><div id=pw></div><div id=mh><h3 id=mt></h3><button id=x>Close</button></div><div id=mi></div></div></div>
@@ -111,7 +111,7 @@ const terms=[];CON.forEach(c=>{if(keys.has(c.k))c.t.forEach(t=>terms.push(t))});
 function parse(){const h=decodeURIComponent(location.hash.slice(1));if(h==='roadmap'){sel={b:null,t:null,rm:true};return}const p=h?h.split('/'):[];sel={b:p[0]||null,t:p[1]||null,rm:false};const br=D.tree.find(b=>b.id===sel.b);if(!br)sel={b:null,t:null,rm:false};else if(sel.t&&!br.topics.find(t=>t.name===sel.t))sel.t=null}
 function go(b,t){let h='';if(b==='roadmap')h='roadmap';else if(b){h=encodeURIComponent(b)+(t?'/'+encodeURIComponent(t):'')}if(h)location.hash=h;else{history.pushState(null,'',location.pathname);parse();render()}document.body.classList.remove('nav');window.scrollTo(0,0)}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function nav(){let h=`<div class=logo>Cyber<span>security</span><br>Roadmap</div><button class="nv${!sel.b&&!sel.rm?' on':''}" data-go=""><b>&#9654;</b>All videos<i>${V.length}</i></button>`;
+function nav(){let h=`<div class=logo>cyber<span>scraped</span><br><small>Cybersecurity, curated</small></div><button class="nv${!sel.b&&!sel.rm?' on':''}" data-go=""><b>&#9654;</b>All videos<i>${V.length}</i></button>`;
 for(const b of D.tree){const c=list({b:b.id}).length;h+=`<button class="nv${sel.b===b.id?' on':''}${c?'':' z'}" data-b="${b.id}"><b>${b.id}</b>${esc(bn(b))}<i>${c}</i></button>`}
 h+=`<button class="nv${sel.rm?' on':''}" data-b="roadmap" style="margin-top:10px"><b>&#9776;</b>Learning roadmap</button>`;
 h+=`<div class=note><b>Community recommended</b>: someone in a public forum recommended this video. <b>Community mention</b>: weaker signal (a list mention or a well-received post), not a direct recommendation. <b>Publisher</b>: official or established training publisher. Labels are not a guarantee of accuracy. Draft for review.</div>`;$('#side').innerHTML=h}
