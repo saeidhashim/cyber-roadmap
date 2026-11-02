@@ -131,6 +131,8 @@ body.notes #md{padding-bottom:calc(44vh + 24px);align-items:flex-start}
 #md.fs #nt{position:static;flex:none;width:340px;height:auto;border-radius:0;border-width:0 0 0 1px;box-shadow:none;animation:none}
 @media(max-width:700px){#md.fs{flex-direction:column}#md.fs #nt{width:auto;height:42%;border-width:1px 0 0}}
 .tnt *,.tnt *:before,.tnt *:after{transition:none!important}
+.logo,.logo span{color:#fff}[data-theme=light] .logo,[data-theme=light] .logo span{color:#000}.logo{margin-bottom:20px}
+#side .nv{font-size:13.5px;font-weight:400;gap:0}#side .nv.on{font-weight:700}#side .nv i{font-weight:600}
 </style></head><body><div id=app>
 <nav id=side aria-label="Roadmap navigation"></nav><div id=scrim></div>
 <main id=main></main></div>
@@ -207,10 +209,10 @@ const terms=[];CON.forEach(c=>{if(keys.has(c.k))c.t.forEach(t=>terms.push(t))});
 function parse(){const h=decodeURIComponent(location.hash.slice(1));if(h==='roadmap'){sel={b:null,t:null,rm:true};return}const p=h?h.split('/'):[];sel={b:p[0]||null,t:p[1]||null,rm:false};const br=D.tree.find(b=>b.id===sel.b);if(!br)sel={b:null,t:null,rm:false};else if(sel.t&&!br.topics.find(t=>t.name===sel.t))sel.t=null}
 function go(b,t){let h='';if(b==='roadmap')h='roadmap';else if(b){h=encodeURIComponent(b)+(t?'/'+encodeURIComponent(t):'')}if(h)location.hash=h;else{history.pushState(null,'',location.pathname);parse();render()}document.body.classList.remove('nav');window.scrollTo(0,0)}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function nav(){let h=`<div class=logo>cyber<span>scraped</span><br><small>Cybersecurity, curated</small></div><button class="nv${!sel.b&&!sel.rm?' on':''}" data-go=""><b>&#9654;</b>All videos<i>${V.length}</i></button>`;
-for(const b of D.tree){const c=list({b:b.id}).length;h+=`<button class="nv${sel.b===b.id?' on':''}${c?'':' z'}" data-b="${b.id}"><b>${b.id}</b>${esc(bn(b))}<i>${c}</i></button>`}
-h+=`<button class="nv${sel.rm?' on':''}" data-b="roadmap" style="margin-top:10px"><b>&#9776;</b>Learning roadmap</button>`;
-h+=`<details id=lab><summary>What the labels mean</summary><p><b>Community recommended</b>: someone in a public forum recommended this video. <b>Community mention</b>: weaker signal (a list mention or a well-received post), not a direct recommendation. <b>Publisher</b>: official or established training publisher. Labels are not a guarantee of accuracy.</p><p>Views and upload dates are a snapshot checked on 2 Nov 2026, not live. A video with none shown has not been checked yet.</p></details>`;$('#side').innerHTML=h}
+function nav(){let h=`<div class=logo>cyber<span>scraped</span></div><button class="nv${!sel.b&&!sel.rm?' on':''}" data-go="">All videos${!sel.b&&!sel.rm?`<i>${V.length}</i>`:''}</button>`;
+for(const b of D.tree){const c=list({b:b.id}).length;h+=`<button class="nv${sel.b===b.id?' on':''}${c?'':' z'}" data-b="${b.id}">${esc(bn(b))}${sel.b===b.id?`<i>${c}</i>`:''}</button>`}
+h+=`<button class="nv${sel.rm?' on':''}" data-b="roadmap" style="margin-top:10px">Learning roadmap</button>`;
+;$('#side').innerHTML=h}
 function roadmap(){let h='<div id=head><h2>Learning roadmap</h2><p>The full study map. Numbers show videos made for that exact item. Tap a branch or topic to open its videos.</p></div><div class=rm>';
 for(const b of D.tree){h+=`<div class=rb><h3><b>${b.id}</b><a data-b="${b.id}">${esc(bn(b))}</a></h3>${b.desc?'<p>'+esc(b.desc)+'</p>':'<p>Learn this once. Every branch builds on it.</p>'}`;
 for(const t of b.topics){const tc=list({b:b.id,t:t.name}).length;h+=`<div class=rt><a data-b="${b.id}" data-t="${esc(t.name)}">${esc(t.name)}</a><i>${tc} video${tc==1?'':'s'}</i></div><ul class=ri>${t.items.map(it=>{const n=direct(b.id,t.name,it);return `<li class="${n?'':'zero'}"><em>${n||''}</em>${esc(it)}</li>`}).join('')}</ul>`}h+='</div>'}
