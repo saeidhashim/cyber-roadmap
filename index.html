@@ -228,14 +228,14 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){if($('#md').classLi
 window.addEventListener('hashchange',()=>{parse();render()});window.addEventListener('popstate',()=>{parse();render()});parse();render();
 
 (function(){document.addEventListener('keydown',e=>{if(e.key==='/'&&!/INPUT|TEXTAREA/.test(document.activeElement.tagName)){const q=document.getElementById('q');if(q){e.preventDefault();q.focus()}}})})();
-(function(){const K='cs-notes',a=$('#na'),st=$('#ns'),nt=$('#nt');try{a.value=localStorage.getItem(K)||''}catch(_){}let tm;
-function save(){try{localStorage.setItem(K,a.value);st.textContent='Saved in this browser'}catch(_){st.textContent='Could not save here'}}
+(function(){const K='cs-notes',a=$('#na'),st=$('#ns'),nt=$('#nt'),OK='Saved in this browser',BAD='Not saved: browser storage is blocked';let tm,can=true;try{a.value=localStorage.getItem(K)||'';localStorage.setItem('cs-probe','1');localStorage.removeItem('cs-probe')}catch(_){can=false;st.textContent=BAD}
+function save(){try{localStorage.setItem(K,a.value);if(localStorage.getItem(K)!==a.value)throw 0;can=true;st.textContent=OK}catch(_){can=false;st.textContent=BAD}}
 a.addEventListener('input',()=>{st.textContent='Saving...';clearTimeout(tm);tm=setTimeout(save,350)});window.addEventListener('pagehide',save);
 function tog(on){document.body.classList.toggle('notes',on);nt.classList.toggle('on',on);document.querySelectorAll('#notes').forEach(b=>b.setAttribute('aria-expanded',on));if(on)a.focus()}
 document.addEventListener('click',e=>{if(e.target.closest('#notes')){tog(!nt.classList.contains('on'));return}
 if(e.target.closest('#nc')){tog(false);return}
 if(e.target.closest('#ni')){const v=window.curV;if(!v)return;a.value+=(a.value&&!a.value.endsWith('\n')?'\n\n':'')+'\u25B6 '+v.t+' ('+v.c+')\n';a.dispatchEvent(new Event('input'));a.focus();a.setSelectionRange(a.value.length,a.value.length);a.scrollTop=a.scrollHeight;return}
-if(e.target.closest('#ncp')){const t=a.value;const ok=()=>{st.textContent='Copied';setTimeout(()=>st.textContent='Saved in this browser',1500)};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(ok,()=>{a.select();document.execCommand('copy');ok()});else{a.select();document.execCommand('copy');ok()}return}
+if(e.target.closest('#ncp')){const t=a.value;const ok=()=>{st.textContent='Copied';setTimeout(()=>st.textContent=can?OK:BAD,1500)};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(ok,()=>{a.select();document.execCommand('copy');ok()});else{a.select();document.execCommand('copy');ok()}return}
 if(e.target.closest('#ndl')){const u=URL.createObjectURL(new Blob([a.value],{type:'text/plain'})),l=document.createElement('a');l.href=u;l.download='cyberscraped-notes.txt';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),500)}});
 const op=window.play,os=window.shut;window.play=function(id){op(id);window.curV=V.find(x=>x.id===id);$('#ni').disabled=false;$('#ni').title='Add this video to your notes'};
 window.shut=function(){os();window.curV=null;$('#ni').disabled=true;$('#ni').title='Open a video to add it'}})();
